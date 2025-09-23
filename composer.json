@@ -1,0 +1,35 @@
+{
+    "name": "mbsoft31/graph-algorithms",
+    "description": "A high-performance library of standard graph algorithms for PHP.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "mbsoft31/graph-core": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mbsoft\\Graph\\Algorithms\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mbsoft\\Graph\\Algorithms\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.0",
+        "phpbench/phpbench": "^1.3",
+        "phpstan/phpstan": "^1.11"
+    },
+    "scripts": {
+        "test": "pest",
+        "bench": "phpbench run --report=default",
+        "stan": "phpstan analyse src --level=max"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
