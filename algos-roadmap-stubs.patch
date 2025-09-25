@@ -1,0 +1,405 @@
+diff --git a/src/Contracts/AuthorityHubAlgorithmInterface.php b/src/Contracts/AuthorityHubAlgorithmInterface.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Contracts/AuthorityHubAlgorithmInterface.php
+@@ -0,0 +1,23 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Contracts;
++
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * HITS-style algorithms that return two scores per node (hub & authority).
++ */
++interface AuthorityHubAlgorithmInterface
++{
++    /**
++     * @return array<string, array{hub: float, authority: float}>
++     */
++    public function compute(GraphInterface $graph): array;
++}
+diff --git a/src/Contracts/CommunityDetectorInterface.php b/src/Contracts/CommunityDetectorInterface.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Contracts/CommunityDetectorInterface.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Contracts;
++
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * Community detection algorithms (label propagation, Louvain, etc.).
++ * Returns a simple map nodeId -> community label (int|string).
++ */
++interface CommunityDetectorInterface
++{
++    /**
++     * @return array<string, int|string> Map of node ID -> community label
++     */
++    public function detect(GraphInterface $graph): array;
++}
+diff --git a/src/Contracts/ComponentsFinderInterface.php b/src/Contracts/ComponentsFinderInterface.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Contracts/ComponentsFinderInterface.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Contracts;
++
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * Connected components (typically for undirected or weakly connected views).
++ */
++interface ComponentsFinderInterface
++{
++    /**
++     * @return list<list<string>> List of components; each is a list of node IDs.
++     */
++    public function findComponents(GraphInterface $graph): array;
++}
+diff --git a/src/Contracts/CoreDecompositionInterface.php b/src/Contracts/CoreDecompositionInterface.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Contracts/CoreDecompositionInterface.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Contracts;
++
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * k-core decomposition: returns the core number per node.
++ */
++interface CoreDecompositionInterface
++{
++    /**
++     * @return array<string, int> Map of node ID -> core number (k)
++     */
++    public function compute(GraphInterface $graph): array;
++}
+diff --git a/src/Contracts/LinkPredictorInterface.php b/src/Contracts/LinkPredictorInterface.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Contracts/LinkPredictorInterface.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Contracts;
++
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * Link prediction heuristics.
++ */
++interface LinkPredictorInterface
++{
++    /**
++     * Score a potential link between two nodes (higher = more likely).
++     */
++    public function score(GraphInterface $graph, string $u, string $v): float;
++
++    /**
++     * Recommend likely new neighbors for a given node (excluding existing neighbors).
++     * @return array<string,float> Node ID -> score, typically top-k sorted by score desc.
++     */
++    public function scoresFrom(GraphInterface $graph, string $u, int $k = 20): array;
++}
+diff --git a/src/Centrality/PersonalizedPageRank.php b/src/Centrality/PersonalizedPageRank.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Centrality/PersonalizedPageRank.php
+@@ -0,0 +1,49 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Centrality;
++
++use Mbsoft\Graph\Algorithms\Contracts\CentralityAlgorithmInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * Random Walk with Restart / Personalized PageRank.
++ *
++ * Usage: new PersonalizedPageRank(['seedA' => 1.0, 'seedB' => 0.5], 0.85, 100, 1e-6)
++ */
++final class PersonalizedPageRank implements CentralityAlgorithmInterface
++{
++    /** @var array<string,float> */
++    private array $teleport; // unnormalized preferences
++
++    public function __construct(
++        array $teleportVector = [],     // nodeId => weight; empty means uniform
++        private readonly float $dampingFactor = 0.85,
++        private readonly int $maxIterations = 100,
++        private readonly float $tolerance = 1e-6
++    ) {
++        $this->teleport = $teleportVector;
++    }
++
++    public function compute(GraphInterface $graph): array
++    {
++        $ag = new AlgorithmGraph($graph);
++        if ($ag->nodeCount === 0) return [];
++
++        // TODO: implement real RWR; for now return empty map to be filled later.
++        // Keep signature stable for incremental implementation.
++        return [];
++    }
++}
+diff --git a/src/Centrality/Betweenness.php b/src/Centrality/Betweenness.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Centrality/Betweenness.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Centrality;
++
++use Mbsoft\Graph\Algorithms\Contracts\CentralityAlgorithmInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * Brandes betweenness centrality (unweighted baseline).
++ * Optional: add weighted support later.
++ */
++final class Betweenness implements CentralityAlgorithmInterface
++{
++    public function __construct(
++        private readonly bool $normalized = true
++    ) {}
++
++    public function compute(GraphInterface $graph): array
++    {
++        $ag = new AlgorithmGraph($graph);
++        if ($ag->nodeCount === 0) return [];
++
++        // TODO: implement Brandes algorithm; return nodeId => score
++        return [];
++    }
++}
+diff --git a/src/Centrality/Hits.php b/src/Centrality/Hits.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Centrality/Hits.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Centrality;
++
++use Mbsoft\Graph\Algorithms\Contracts\AuthorityHubAlgorithmInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * HITS (hubs and authorities).
++ */
++final class Hits implements AuthorityHubAlgorithmInterface
++{
++    public function __construct(
++        private readonly int $maxIterations = 100,
++        private readonly float $tolerance = 1e-6
++    ) {}
++
++    public function compute(GraphInterface $graph): array
++    {
++        $ag = new AlgorithmGraph($graph);
++        if ($ag->nodeCount === 0) return [];
++
++        // TODO: implement HITS power-iteration; return nodeId => ['hub'=>, 'authority'=>]
++        return [];
++    }
++}
+diff --git a/src/Components/Connected.php b/src/Components/Connected.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Components/Connected.php
+@@ -0,0 +1,33 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Components;
++
++use Mbsoft\Graph\Algorithms\Contracts\ComponentsFinderInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * Connected components on an undirected view of the graph
++ * (i.e., treat edges as bidirectional).
++ */
++final class Connected implements ComponentsFinderInterface
++{
++    public function findComponents(GraphInterface $graph): array
++    {
++        $ag = new AlgorithmGraph($graph);
++        $n = $ag->nodeCount;
++        if ($n === 0) return [];
++
++        // TODO: implement union of succ/pred per node and run iterative DFS/BFS to collect components.
++        return [];
++    }
++}
+diff --git a/src/Decomposition/KCore.php b/src/Decomposition/KCore.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Decomposition/KCore.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Decomposition;
++
++use Mbsoft\Graph\Algorithms\Contracts\CoreDecompositionInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * k-core decomposition on the undirected view (standard definition).
++ */
++final class KCore implements CoreDecompositionInterface
++{
++    public function compute(GraphInterface $graph): array
++    {
++        $ag = new AlgorithmGraph($graph);
++        if ($ag->nodeCount === 0) return [];
++
++        // TODO: implement peeling process; return nodeId => core number
++        return [];
++    }
++}
+diff --git a/src/LinkPrediction/CommonNeighbors.php b/src/LinkPrediction/CommonNeighbors.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/LinkPrediction/CommonNeighbors.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\LinkPrediction;
++
++use Mbsoft\Graph\Algorithms\Contracts\LinkPredictorInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++final class CommonNeighbors implements LinkPredictorInterface
++{
++    public function score(GraphInterface $graph, string $u, string $v): float
++    {
++        $ag = new AlgorithmGraph($graph);
++        // TODO: intersect neighbor sets of u and v on undirected view
++        return 0.0;
++    }
++
++    public function scoresFrom(GraphInterface $graph, string $u, int $k = 20): array
++    {
++        // TODO: compute scores against non-neighbors of u, return top-k
++        return [];
++    }
++}
+diff --git a/src/LinkPrediction/AdamicAdar.php b/src/LinkPrediction/AdamicAdar.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/LinkPrediction/AdamicAdar.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\LinkPrediction;
++
++use Mbsoft\Graph\Algorithms\Contracts\LinkPredictorInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++final class AdamicAdar implements LinkPredictorInterface
++{
++    public function score(GraphInterface $graph, string $u, string $v): float
++    {
++        $ag = new AlgorithmGraph($graph);
++        // TODO: sum over common neighbors w of 1/log(deg(w))
++        return 0.0;
++    }
++
++    public function scoresFrom(GraphInterface $graph, string $u, int $k = 20): array
++    {
++        // TODO: compute top-k by Adamic-Adar
++        return [];
++    }
++}
+diff --git a/src/LinkPrediction/ResourceAllocation.php b/src/LinkPrediction/ResourceAllocation.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/LinkPrediction/ResourceAllocation.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\LinkPrediction;
++
++use Mbsoft\Graph\Algorithms\Contracts\LinkPredictorInterface;
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++final class ResourceAllocation implements LinkPredictorInterface
++{
++    public function score(GraphInterface $graph, string $u, string $v): float
++    {
++        $ag = new AlgorithmGraph($graph);
++        // TODO: sum over common neighbors w of 1/deg(w)
++        return 0.0;
++    }
++
++    public function scoresFrom(GraphInterface $graph, string $u, int $k = 20): array
++    {
++        // TODO: compute top-k by RA index
++        return [];
++    }
++}
+diff --git a/src/Traversal/BfsDistance.php b/src/Traversal/BfsDistance.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/Traversal/BfsDistance.php
+@@ -0,0 +1,35 @@
++<?php
++
++namespace Mbsoft\Graph\Algorithms\Traversal;
++
++use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
++use Mbsoft\Graph\Contracts\GraphInterface;
++
++/**
++ * A non-breaking addition: BFS variant that returns order and distance map
++ * without modifying your existing Bfs class.
++ */
++final class BfsDistance
++{
++    /**
++     * @return array{order: list<string>, distance: array<string,int>}
++     */
++    public function traverseWithDistance(GraphInterface $graph, string $start): array
++    {
++        $ag = new AlgorithmGraph($graph);
++        if (!$graph->hasNode($start)) {
++            return ['order' => [], 'distance' => []];
++        }
++
++        // TODO: implement queue-based BFS using $ag->successors
++        // Keep the signature stable for incremental implementation.
++        return ['order' => [], 'distance' => []];
++    }
++}
