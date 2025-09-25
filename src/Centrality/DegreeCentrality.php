@@ -19,9 +19,9 @@ use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
  */
 final class DegreeCentrality implements CentralityAlgorithmInterface
 {
-    public const string IN_DEGREE = 'in';
-    public const string OUT_DEGREE = 'out';
-    public const string TOTAL_DEGREE = 'total';
+    public const IN_DEGREE = 'in';
+    public const OUT_DEGREE = 'out';
+    public const TOTAL_DEGREE = 'total';
 
     public function __construct(
         private readonly string $mode = self::TOTAL_DEGREE,
