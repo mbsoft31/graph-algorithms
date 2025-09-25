@@ -1,5 +1,9 @@
-﻿<?php
+<?php
+
+declare(strict_types=1);
+
 namespace Mbsoft\Graph\Algorithms\Contracts;
+
 use Mbsoft\Graph\Contracts\GraphInterface;
 /** Link prediction heuristics. */
 interface LinkPredictorInterface

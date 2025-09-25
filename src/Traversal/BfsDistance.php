@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Traversal;
 use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;
 use Mbsoft\Graph\Contracts\GraphInterface;

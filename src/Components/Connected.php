@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Components;
 use Mbsoft\Graph\Algorithms\Contracts\ComponentsFinderInterface;
 use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Contracts;
 use Mbsoft\Graph\Contracts\GraphInterface;
 /** Community detection algorithms (label propagation, Louvain, etc.). */

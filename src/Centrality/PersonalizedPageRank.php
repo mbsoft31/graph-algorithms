@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Centrality;
 use Mbsoft\Graph\Algorithms\Contracts\CentralityAlgorithmInterface;
 use Mbsoft\Graph\Algorithms\Support\AlgorithmGraph;

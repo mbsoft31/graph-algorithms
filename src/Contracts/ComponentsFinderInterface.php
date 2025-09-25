@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Contracts;
 use Mbsoft\Graph\Contracts\GraphInterface;
 /** Connected components (typically for undirected or weakly connected views). */

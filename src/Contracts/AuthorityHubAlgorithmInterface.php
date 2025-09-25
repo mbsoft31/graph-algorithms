@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Contracts;
 use Mbsoft\Graph\Contracts\GraphInterface;
 /** HITS-style algorithms that return two scores per node (hub & authority). */

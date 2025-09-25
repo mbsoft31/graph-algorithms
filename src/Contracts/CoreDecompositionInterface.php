@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 namespace Mbsoft\Graph\Algorithms\Contracts;
 use Mbsoft\Graph\Contracts\GraphInterface;
 /** k-core decomposition: returns the core number per node. */
