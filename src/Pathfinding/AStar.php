@@ -44,14 +44,15 @@ final class AStar implements PathfindingAlgorithmInterface
         $startIdx = $algoGraph->ids()->index($startNodeId);
         $endIdx = $algoGraph->ids()->index($endNodeId);
 
-        // Build neighbor and weight lists
+        // Build neighbor and weight lists for cache efficiency
         [$neighbors, $weights] = $this->buildWeightStructure($graph, $algoGraph);
 
         $N = $algoGraph->nodeCount();
-        $gScore = array_fill(0, $N, INF);  // Cost from start
-        $fScore = array_fill(0, $N, INF);  // gScore + heuristic
         $previous = array_fill(0, $N, null);
         $visited = array_fill(0, $N, false);
+
+        $gScore = array_fill(0, $N, INF);  // Cost from start
+        $fScore = array_fill(0, $N, INF);  // gScore + heuristic
 
         $gScore[$startIdx] = 0.0;
         $fScore[$startIdx] = ($this->heuristicCallback)($startNodeId, $endNodeId);
