@@ -9,7 +9,7 @@ final class KCore implements CoreDecompositionInterface
     public function compute(GraphInterface $graph): array
     {
         $ag = new AlgorithmGraph($graph);
-        if ($ag->nodeCount === 0) return [];
+        if ($ag->nodeCount() === 0) return [];
         // TODO: implement peeling; return nodeId => core number
         return [];
     }

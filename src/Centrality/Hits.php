@@ -14,7 +14,7 @@ final class Hits implements AuthorityHubAlgorithmInterface
     public function compute(GraphInterface $graph): array
     {
         $ag = new AlgorithmGraph($graph);
-        if ($ag->nodeCount === 0) return [];
+        if ($ag->nodeCount() === 0) return [];
         // TODO: implement HITS power-iteration; return nodeId => ['hub'=>, 'authority'=>]
         return [];
     }

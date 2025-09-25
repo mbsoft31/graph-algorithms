@@ -21,7 +21,7 @@ final class PersonalizedPageRank implements CentralityAlgorithmInterface
     public function compute(GraphInterface $graph): array
     {
         $ag = new AlgorithmGraph($graph);
-        if ($ag->nodeCount === 0) return [];
+        if ($ag->nodeCount() === 0) return [];
         // TODO: implement real RWR; keep signature stable for incremental implementation.
         return [];
     }

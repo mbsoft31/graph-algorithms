@@ -9,7 +9,7 @@ final class Connected implements ComponentsFinderInterface
     public function findComponents(GraphInterface $graph): array
     {
         $ag = new AlgorithmGraph($graph);
-        if ($ag->nodeCount === 0) return [];
+        if ($ag->nodeCount() === 0) return [];
         // TODO: merge succ/pred neighbor sets; collect components with iterative DFS/BFS.
         return [];
     }

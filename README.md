@@ -1,75 +1,10 @@
 # mbsoft/graph-algorithms
 
-A high-performance library of standard graph algorithms for PHP 8.2+.
-
-[![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://php.net)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-
-## Features
-
-**Performance-Optimized**: All algorithms use an internal `AlgorithmGraph` proxy that converts string-based graphs to
-integer-indexed adjacency lists for maximum performance in tight loops.
-
-**Comprehensive Algorithm Coverage**:
-
-- **Centrality**: PageRank, Degree Centrality (in/out/total, normalized)
-- **Pathfinding**: Dijkstra, A* with heuristic support
-- **Traversal**: Breadth-First Search (BFS), Depth-First Search (DFS)
-- **Components**: Strongly Connected Components (Tarjan's algorithm)
-- **Ordering**: Topological Sort with cycle detection
-- **Minimum Spanning Tree**: Prim's algorithm
-
-**Robust Design**:
-
-- Strict PHP 8.2+ typing with comprehensive error handling
-- Clean contracts and value objects (PathResult, MstResult)
-- Configurable parameters (damping factors, heuristics, weight callbacks)
-- Handles edge cases: empty graphs, disconnected components, negative weights
-
-## Installation
-
-# mbsoft/graph-algorithms
-
-A high-performance, stateless library of standard graph algorithms for PHP 8.2+, designed to operate over
-mbsoft/graph-core via GraphInterface while projecting to tight, integer-indexed adjacency lists for speed.
-
-## Features
-
-- Traversal: BFS (queue-based), DFS (iterative to avoid recursion limits)
-- Pathfinding: Dijkstra (non-negative weights), A* (pluggable heuristic)
-- Ordering/Components: Topological sort (Kahn’s algorithm with cycle detection), Strongly Connected Components (Tarjan)
-- Centrality: PageRank (damping, dangling mass, L1 convergence), Degree centrality (in/out/total with optional
-  normalization)
-- MST: Prim (binary heap)
-- Performance: Single projection step to integer indices; cache-friendly adjacency layouts; no recursion on hot paths
-
-## Requirements
-
-- PHP: ^8.2
-- mbsoft/graph-core: ^1.0
-
-## Installation
-
-```bash
-composer require mbsoft/graph-algorithms
-```
-
-## Quickstart
-
-This comprehensive example demonstrates all the major algorithms in the mbsoft/graph-algorithms 
-package with practical use cases, performance comparisons, and detailed output showing how each 
-algorithm behaves on a complex graph structure. The example includes clear explanations and 
-guidance for when to use each algorithm.
-
-```bash
-php ./examples/index.php
-```
-
-# mbsoft/graph-algorithms
-
-[![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue.svg
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/mbsoft31/graph-algorithms Status](https://img.shields.io/github/actions/workflow/status/mbsoft31/graph-algorithms/ci.yml?branch=main
-[![Total Downloads](https://img.shields.io/packagist/
+[![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue.svg)](https://php.net)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/mbsoft31/graph-algorithms.svg?style=flat-square)](https://packagist.org/packages/mbsoft/graph-algorithms)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/mbsoft31/graph-algorithms/ci.yml?branch=main&style=flat-square)](https://github.com/mbsoft31/graph-algorithms/actions)
+[![Total Downloads](https://img.shields.io/packagist/dt/mbsoft31/graph-algorithms.svg?style=flat-square)](https://packagist.org/packages/mbsoft31/graph-algorithms)
 
 A high-performance library of standard graph algorithms for PHP. This library provides efficient implementations of essential graph algorithms with clean APIs, comprehensive error handling, and performance optimizations for production use.
 
