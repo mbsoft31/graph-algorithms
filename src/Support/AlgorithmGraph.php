@@ -24,6 +24,9 @@ final class AlgorithmGraph
     /** @var array<int, list<int>> Predecessors adjacency list. */
     private array $predecessors = [];
 
+    /** @var array<int, array<int, float>> Edge weights [u][v] => weight. */
+    private array $edgeWeights = [];
+
     /** @var list<int> All node indices. */
     private array $nodes = [];
 
@@ -33,7 +36,8 @@ final class AlgorithmGraph
 
     public function __construct(
         GraphInterface $graph,
-        bool $needPredecessors = false
+        bool $needPredecessors = false,
+        bool $needEdgeWeights = false
     ) {
         $this->ids = new IndexMap();
         $this->directed = $graph->isDirected();
@@ -53,6 +57,12 @@ final class AlgorithmGraph
             foreach ($graph->successors($nodeId) as $successorId) {
                 $v = $this->ids->index($successorId);
                 $this->successors[$u][] = $v;
+                
+                if ($needEdgeWeights) {
+                    $attrs = $graph->edgeAttrs($nodeId, $successorId);
+                    $this->edgeWeights[$u][$v] = (float) ($attrs['weight'] ?? 1.0);
+                }
+                
                 $this->edgeCount++;
             }
         }
@@ -96,6 +106,14 @@ final class AlgorithmGraph
     public function predecessors(): array
     {
         return $this->predecessors;
+    }
+
+    /**
+     * @return array<int, array<int, float>>
+     */
+    public function edgeWeights(): array
+    {
+        return $this->edgeWeights;
     }
 
     public function nodeCount(): int
