@@ -55,6 +55,7 @@ final class DegreeCentrality implements CentralityAlgorithmInterface
                 self::IN_DEGREE => $inDegree,
                 self::OUT_DEGREE => $outDegree,
                 self::TOTAL_DEGREE => $graph->isDirected() ? $inDegree + $outDegree : $outDegree,
+                default => throw new InvalidArgumentException('Mode must be in, out, or total'),
             };
 
             $scores[$i] = (float) $score;
